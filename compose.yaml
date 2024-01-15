@@ -16,7 +16,8 @@ services:
       - "3306:3306"
     environment:
       MYSQL_DATABASE: overcooked
-      MYSQL_USER: root
-      MYSQL_PASSWORD: admin
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: overcooked
+      MYSQL_PASSWORD: overcooked
     volumes:
       - /home/node/app
