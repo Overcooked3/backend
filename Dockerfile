@@ -2,7 +2,7 @@
 FROM node:18
 
 # Définir le répertoire de travail
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Copier les fichiers package.json et package-lock.json
 COPY package*.json ./
@@ -10,16 +10,17 @@ COPY package*.json ./
 # Installer les dépendances du projet
 RUN npm install
 
+# Copier le schéma Prisma dans le conteneur
+COPY prisma ./prisma
+
 # Installer le CLI Prisma
 RUN npx prisma generate
-
-RUN npx prisma migrate dev --name init
 
 # Copier les fichiers du projet dans le conteneur
 COPY . .
 
-# Exposer le port 3000
+# Exposer le port 2000
 EXPOSE 2000
 
 # Commande pour démarrer l'application
-CMD ["npm", "start"]
+CMD ["node", "index.js"]

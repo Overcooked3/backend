@@ -1,22 +1,29 @@
 services:
   backend:
+    container_name: backend
+    image: backend
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "2000:2000"
-    depends_on:
-      - database
+      - 2000:2000
     env_file:
       - .env
+    depends_on:
+      - database
+    volumes:
+      - .:/app
 
   database:
+    container_name: database
     image: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_BASE}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
     ports:
       - "3306:3306"
-    environment:
-      MYSQL_DATABASE: overcooked
-      MYSQL_USER: root
-      MYSQL_PASSWORD: admin
     volumes:
-      - /home/node/app
+      - ./dbdata:/var/lib/mysql
