@@ -1,0 +1,59 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model comment {
+  id                      BigInt               @id
+  user                    Unsupported("uuid")?
+  recipe                  BigInt?
+  mark                    Int?                 @db.SmallInt
+  comment                 String?              @db.Text
+  user_comment_userTouser user?                @relation("comment_userTouser", fields: [user], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "comment_ibfk_1") @ignore
+  recipes                 recipes?             @relation(fields: [recipe], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "comment_ibfk_2")
+
+  @@index([recipe], map: "recipe")
+  @@index([user], map: "user")
+}
+
+model recipes {
+  id                      BigInt               @id
+  titre                   String?              @db.Text
+  image                   String?              @db.Text
+  ingredients             String?              @db.Text
+  steps                   String?              @db.Text
+  cookingTime             DateTime?            @db.Time(0)
+  servings                Int?
+  date                    DateTime?            @db.Date
+  description             String?              @db.Text
+  tag                     recipes_tag?
+  user                    Unsupported("uuid")?
+  comment                 comment[]
+  user_recipes_userTouser user?                @relation("recipes_userTouser", fields: [user], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "recipes_ibfk_1") @ignore
+
+  @@index([user], map: "user")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model user {
+  id                         Unsupported("uuid") @id
+  username                   String?             @unique(map: "username") @db.VarChar(255)
+  email                      String?             @unique(map: "email") @db.VarChar(255)
+  password                   String?             @db.Text
+  perm                       Boolean?
+  comment_comment_userTouser comment[]           @relation("comment_userTouser")
+  recipes_recipes_userTouser recipes[]           @relation("recipes_userTouser")
+
+  @@ignore
+}
+
+enum recipes_tag {
+  v_g_tarien   @map("végétarien")
+  rapide
+  traditionnel
+  fusion
+}
