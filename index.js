@@ -16,6 +16,7 @@ app.get('/', async (req, res) => {
     conn = await pool.getConnection();
     res.send("Hello World!");
   } catch (error) {
+    console.log(error);
     res.status(500).send("An error occurred");
   } finally {
     if (conn) conn.release();
