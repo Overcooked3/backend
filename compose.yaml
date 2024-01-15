@@ -1,0 +1,21 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "2000:2000"
+    depends_on:
+      - database
+    env_file:
+      - .env
+
+  database:
+    image: mariadb
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: recettes
+      MYSQL_USER: root
+      MYSQL_PASSWORD: admin
