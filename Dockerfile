@@ -10,6 +10,11 @@ COPY package*.json ./
 # Installer les dépendances du projet
 RUN npm install
 
+# Installer le CLI Prisma
+RUN npx prisma generate
+
+RUN npx prisma migrate dev --name init
+
 # Copier les fichiers du projet dans le conteneur
 COPY . .
 
