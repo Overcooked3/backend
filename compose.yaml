@@ -19,4 +19,4 @@ services:
       MYSQL_USER: root
       MYSQL_PASSWORD: admin
   volumes:
-    - myapp:/home/node/app
+    - /home/node/app
