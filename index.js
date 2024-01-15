@@ -1,6 +1,6 @@
 require('dotenv').config()
 
-/*
+
 const mariadb = require('mariadb');
 const pool = mariadb.createPool({
     host: process.env.DB_HOST,
@@ -8,14 +8,14 @@ const pool = mariadb.createPool({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_BASE
 })
-*/
+
 const express = require('express');
 const app = express();
 
 app.get('/', async (req, res) => {
     let conn;
   try {
-    // rconn = await pool.getConnection();
+    rconn = await pool.getConnection();
     res.send("Hello World!");
   } catch (error) {
     res.status(500).send("An error occurred");
