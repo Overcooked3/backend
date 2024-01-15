@@ -18,3 +18,5 @@ services:
       MYSQL_DATABASE: overcooked
       MYSQL_USER: root
       MYSQL_PASSWORD: admin
+  volumes:
+    - myapp:/home/node/app
