@@ -48,8 +48,6 @@ model user {
   perm                       Boolean?
   comment_comment_userTouser comment[] @relation("comment_userTouser")
   recipes_recipes_userTouser recipes[] @relation("recipes_userTouser")
-
-  @@ignore
 }
 
 enum recipes_tag {
