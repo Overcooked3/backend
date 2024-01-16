@@ -4,7 +4,6 @@ const router = express.Router();
 const userController = require('../controllers/userController');
 const authenticateToken = require('../middlewares/jwtMiddleware');
 
-
 // Routes pour les utilisateurs
 router.post('/login', userController.login);
 router.post('/register', userController.createUser);
