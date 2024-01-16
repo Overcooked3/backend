@@ -158,6 +158,31 @@ app.put('/recipes/:id', async (req, res) => {
 });
 
 
+//Route pour creer une recette 
+app.post('/recipes/creer/', async (req, res) => {
+  try {
+    const {titre,ingredients,steps, servings, description, cookingTime, date, image} = req.body;
+
+    const newRecipe = await prisma.recipes.create({
+      data: {
+        titre: titre,
+        ingredients: ingredients,
+        steps : steps,
+        servings: servings,
+        description: description,
+        cookingTime: cookingTime, 
+        date: date,
+        image: image},
+    });
+
+    res.status(201).json({ message: 'Recette créée avec succès', newRecipe });
+  } catch (error) {
+    console.error('Erreur lors de la création de la recette:', error);
+    res.status(500).json({ message: 'Erreur lors de la création de la recette', error });
+  }
+});
+
+
 app.listen(process.env.PORT, () => {
   console.log('Server is running on port ' + process.env.PORT);
 });
