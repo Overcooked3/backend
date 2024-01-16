@@ -1,28 +1,19 @@
 require('dotenv').config()
+const { PrismaClient } = require('@prisma/client')
 
-const mariadb = require('mariadb');
-const pool = mariadb.createPool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_BASE
-})
+const prisma = new PrismaClient()
+
 const express = require('express');
+
 const app = express();
 
+app.use(express.json());
+
 app.get('/', async (req, res) => {
-  let conn;
-  try {
-    conn = await pool.getConnection();
-    res.send("Hello World!");
-  } catch (error) {
-    console.log(error);
-    res.status(500).send("An error occurred");
-  } finally {
-    if (conn) conn.release();
-  }
+  const users = await prisma.user.findMany();
+  res.json(users);
 });
 
 app.listen(process.env.PORT, () => {
-    console.log('Server is running on port ' + process.env.PORT);
+  console.log('Server is running on port ' + process.env.PORT);
 });
