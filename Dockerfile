@@ -23,4 +23,4 @@ COPY . .
 EXPOSE 2000
 
 # Commande pour démarrer l'application
-CMD ["node", "index.js"]
+CMD ["npm", "start"]
