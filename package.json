@@ -9,8 +9,7 @@
   },
   "jest": {
     "preset": "ts-jest",
-    "testEnvironment": "node",
-    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.[jt]sx?$"
+    "testEnvironment": "node"
   },
   "keywords": [],
   "author": "",
