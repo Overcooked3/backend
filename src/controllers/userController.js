@@ -5,39 +5,85 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient()
 
 const login = async (req, res) => {
-    const {email, password} = req.body;
-    const user = await prisma.user.findUnique({
-        where: {
-          email: email,
-        },
-      })
-      if (bcrypt.compareSync(password, user.password)) {
-        res.status(201).send({
-            token: generateAccessToken(email)
-        });
-    } else {
-        res.status(401).send("Wrong password");
+    const {username, password} = req.body;
+    try {
+        const user = await prisma.user.findUnique({
+            where: {
+              username: username,
+            },
+          })
+          if (bcrypt.compareSync(password, user.password)) {
+            res.status(201).send({
+                token: generateAccessToken(user.email)
+            });
+        } else {
+            res.status(401).send("Wrong password");
+        }
+    }
+    catch (err) {
+        res.status(401).send("Wrong arguments");
     }
 }
 
 const createUser = async (req, res) => {
     const {username, email, password} = req.body;
-    const user = await prisma.user.create({
-        data: {
-            username: req.body.username,
-            email: req.body.email,
-            password: bcrypt.hashSync(req.body.password, 10),
-        }
-    })
-    res.status(201).json({response : user, token : generateAccessToken(email)});
+    try {
+        const user = await prisma.user.create({
+            data: {
+                username: username,
+                email: email,
+                password: bcrypt.hashSync(password, 10),
+            }
+        })
+        res.status(201).json({response : "Connexion réussie", token : generateAccessToken(email)});
+    }
+    catch (err) {
+        res.status(401).send("Wrong arguments");
+    }
 }
 
-const updateUser = (req, res) => {
-
+const updateUser = async (req, res) => {
+    const {username, email, password} = req.body;
+    try {
+        const user = await prisma.user.update({
+            where: {
+                id: req.params.id,
+            },
+            data: {
+                username: username,
+                email: email
+            }
+        })
+        res.status(201).json({response : "Informations mises a jour", token : generateAccessToken(email)});
+    }
+    catch (err) {
+        res.status(400).send("Wrong arguments");
+    }
 }
 
-const deleteUser = (req, res) => {
+const deleteUser = async (req, res) => {
+    const id = req.params.id;
+    try {
+        const user = await prisma.user.delete({
+            where: {
+                id: id,
+            },
+        })
+        res.status(201).json({response : "Utilisateur supprimé"});
+    }
+    catch (err) {
+        res.status(400).send("Wrong arguments");
+    }
+}
 
+const getAllUsers = async (req, res) => {
+    try {
+        const users = await prisma.user.findMany();
+        res.status(201).json(users);
+    }
+    catch (err) {
+        res.status(400).send("Wrong arguments");
+    }
 }
 
 const generateAccessToken = (email) => {
@@ -50,4 +96,5 @@ module.exports = {
     updateUser,
     deleteUser,
     login,
+    getAllUsers,
 };
