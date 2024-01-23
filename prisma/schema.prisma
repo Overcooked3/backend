@@ -39,7 +39,6 @@ model recipes {
   @@index([user], map: "user")
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model user {
   id                         String    @id @default(uuid())
   username                   String?   @unique(map: "username") @db.VarChar(255)
@@ -48,8 +47,6 @@ model user {
   perm                       Boolean?
   comment_comment_userTouser comment[] @relation("comment_userTouser")
   recipes_recipes_userTouser recipes[] @relation("recipes_userTouser")
-
-  @@ignore
 }
 
 enum recipes_tag {
