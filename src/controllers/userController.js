@@ -38,7 +38,7 @@ const createUser = async (req, res) => {
         res.status(201).json({response : "Connexion réussie", token : generateAccessToken(email)});
     }
     catch (err) {
-        res.status(401).send("Wrong arguments");
+        res.status(401).send(err);
     }
 }
 
